@@ -1,0 +1,106 @@
+name: Debug Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: false
+        default: 'auto'
+      changelog:
+        description: 'Changelog notes (one line or markdown)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  checks: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> local.properties
+          echo "GITHUB_TOKEN=${{ secrets.CRASH_REPORT_TOKEN }}" >> local.properties
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event.inputs.version }}" = "auto" ] || [ -z "${{ github.event.inputs.version }}" ]; then
+            # Auto-increment patch version from latest tag
+            LATEST=$(git tag -l "v*" --sort=-version:refname | head -n1 | sed 's/^v//')
+            if [ -z "$LATEST" ]; then
+              VERSION="1.0.0"
+            else
+              MAJOR=$(echo $LATEST | cut -d. -f1)
+              MINOR=$(echo $LATEST | cut -d. -f2)
+              PATCH=$(echo $LATEST | cut -d. -f3)
+              PATCH=$((PATCH + 1))
+              VERSION="${MAJOR}.${MINOR}.${PATCH}"
+            fi
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Assemble debug APK
+        run: ./gradlew :app-mobile:assembleDebug --stacktrace --info
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: flixclusive-${{ steps.version.outputs.version }}
+          path: app-mobile/build/outputs/apk/debug/*.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: "v${{ steps.version.outputs.version }}"
+          body: |
+            ## Flixclusive v${{ steps.version.outputs.version }}
+            
+            ${{ github.event.inputs.changelog || 'Debug build with latest fixes and improvements.' }}
+            
+            ### What's included
+            - Pre-configured TMDB API key
+            - Optimized for ARM64 devices
+            - Latest bug fixes and improvements
+            - Debug logging enabled
+            
+            ### Installation
+            1. Download `flixclusive-debug.apk` below
+            2. Enable **Install from unknown sources**
+            3. Open and install
+            
+            ---
+            Full Changelog: https://github.com/buddhistblueberry/Flixclusive/blob/main/CHANGELOG.md
+          files: app-mobile/build/outputs/apk/debug/*.apk
+          make_latest: true
