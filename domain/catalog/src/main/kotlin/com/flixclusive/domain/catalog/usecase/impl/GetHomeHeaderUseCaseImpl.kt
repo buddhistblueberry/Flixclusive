@@ -8,11 +8,7 @@ import com.flixclusive.data.tmdb.repository.TMDBMetadataRepository
 import com.flixclusive.domain.catalog.R
 import com.flixclusive.domain.catalog.usecase.GetHomeHeaderUseCase
 import com.flixclusive.model.film.Film
-import com.flixclusive.model.film.FilmMetadata
 import com.flixclusive.model.film.FilmSearchItem
-import com.flixclusive.model.film.Movie
-import com.flixclusive.model.film.TvShow
-import com.flixclusive.model.film.util.FilmType
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -60,21 +56,12 @@ internal class GetHomeHeaderUseCaseImpl
 
                         traversedFilms.add(headerItem.identifier)
 
-                        // Try to get metadata, but use search item as fallback
-                        val metadata = getMetadata(headerItem)
-                        
-                        // Create a Film object from headerItem (with metadata if available)
-                        val film = if (metadata != null) {
-                            when (metadata) {
-                                is Movie -> metadata.copy(genres = metadata.genres)
-                                is TvShow -> metadata.copy(genres = metadata.genres)
-                                else -> createFilmFromSearchItem(headerItem)
-                            }
-                        } else {
-                            createFilmFromSearchItem(headerItem)
+                        if (headerItem.isNotPopular) {
+                            return@forEach
                         }
 
-                        return Resource.Success(film)
+                        // Use header item directly (FilmSearchItem implements Film)
+                        return Resource.Success(headerItem)
                     }
                 } catch (e: Exception) {
                     lastError = e
@@ -85,22 +72,6 @@ internal class GetHomeHeaderUseCaseImpl
                 ?: Resource.Failure(R.string.failure_looking_for_header_item)
         }
 
-        private suspend fun getMetadata(film: Film): FilmMetadata? {
-            requireNotNull(film.tmdbId) {
-                "FilmSearchItem must have a valid TMDB ID to fetch metadata."
-            }
-
-            return when (film.filmType) {
-                FilmType.MOVIE -> {
-                    tmdbMetadataRepository.getMovie(film.tmdbId!!).data
-                }
-
-                FilmType.TV_SHOW -> {
-                    tmdbMetadataRepository.getTvShow(film.tmdbId!!).data
-                }
-            }
-        }
-
         private val Film.isNotPopular: Boolean
             get() =
                 safeCall {
@@ -108,59 +79,4 @@ internal class GetHomeHeaderUseCaseImpl
                         isFromTmdb && voteCount < MIN_VOTE_COUNT
                     } == true
                 } == true
-    
-        private fun createFilmFromSearchItem(item: FilmSearchItem): Film {
-            return when (item.filmType) {
-                FilmType.MOVIE -> Movie(
-                    identifier = item.identifier,
-                    tmdbId = item.tmdbId,
-                    title = item.title,
-                    posterImage = item.posterImage,
-                    backdropImage = item.backdropImage,
-                    releaseDate = item.releaseDate,
-                    rating = item.rating,
-                )
-                FilmType.TV_SHOW -> TvShow(
-                    identifier = item.identifier,
-                    tmdbId = item.tmdbId,
-                    name = item.title,
-                    posterImage = item.posterImage,
-                    backdropImage = item.backdropImage,
-                    firstAirDate = item.releaseDate,
-                    rating = item.rating,
-                )
-            }
-        }
-
-        /**
-         * Convert Film to a basic Film object for fallback
-         */
-        private fun Film.toFilm(): Film? {
-            return when (this) {
-                is FilmSearchItem -> {
-                    if (this.filmType == FilmType.MOVIE) {
-                        Movie(
-                            identifier = this.identifier,
-                            tmdbId = this.tmdbId,
-                            title = this.title,
-                            posterImage = this.posterImage,
-                            backdropImage = this.backdropImage,
-                            releaseDate = this.releaseDate,
-                            rating = this.rating,
-                        )
-                    } else {
-                        TvShow(
-                            identifier = this.identifier,
-                            tmdbId = this.tmdbId,
-                            name = this.title,
-                            posterImage = this.posterImage,
-                            backdropImage = this.backdropImage,
-                            firstAirDate = this.releaseDate,
-                            rating = this.rating,
-                        )
-                    }
-                }
-                else -> this
-            }
-        }
     }
