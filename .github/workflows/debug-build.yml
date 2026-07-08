@@ -45,3 +45,24 @@ jobs:
         with:
           name: debug-apk
           path: app-mobile/build/outputs/apk/debug/*.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: debug-${{ github.run_number }}
+          name: "Debug Build ${{ github.run_number }}"
+          body: |
+            ## Debug Build ${{ github.run_number }}
+            
+            ### What's included:
+            - ✅ Pre-configured TMDB API key
+            - ✅ English-only + arm64-only (smaller APK)
+            - ✅ Bug fixes for crash issues
+            - ✅ Debug logging enabled
+            
+            ### Installation:
+            1. Download `flixclusive-debug.apk` below
+            2. Enable "Install from unknown sources"
+            3. Open and install
+          files: app-mobile/build/outputs/apk/debug/*.apk
+          make_latest: false
