@@ -114,7 +114,7 @@ fun getUserBackgroundPalette(avatar: Int): Palette {
             Palette
                 .from(it.toBitmap())
                 .generate()
-        } ?: Palette.from(0xFF6200EE.toInt()).generate()
+        } ?: Palette.from(android.graphics.Bitmap.createBitmap(1, 1, android.graphics.Bitmap.Config.ARGB_8888)).generate()
     }
 }
 

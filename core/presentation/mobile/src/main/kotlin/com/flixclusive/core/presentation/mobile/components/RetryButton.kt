@@ -145,7 +145,7 @@ fun RetryButton(
                 }
 
                 TextFieldStackTrace(
-                    stackTrace = error ?: ""
+                    stackTrace = error ?: "",
                     modifier = Modifier
                         .animateContentSize(tween())
                         .fillMaxWidth(0.95F)
