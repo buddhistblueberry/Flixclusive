@@ -19,9 +19,10 @@ internal class GetEpisodeUseCaseImpl
             var seasonData = tvShow.seasons.find { it.number == season }
 
             if ((seasonData == null || seasonData.episodes.isEmpty()) && tvShow.isFromTmdb && tvShow.tmdbId != null) {
+                val tmdbId = tvShow.tmdbId ?: return null
                 seasonData = tmdbMetadataRepository
                     .getSeason(
-                        id = tvShow.tmdbId!!,
+                        id = tmdbId,
                         seasonNumber = season,
                     ).data
             }

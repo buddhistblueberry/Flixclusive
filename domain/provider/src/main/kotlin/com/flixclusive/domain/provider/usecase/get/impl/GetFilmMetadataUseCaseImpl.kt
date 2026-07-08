@@ -28,7 +28,8 @@ internal class GetFilmMetadataUseCaseImpl
                  film.isNonDefaultProvider -> {
                     withContext(appDispatchers.io) {
                         try {
-                            val api = providerApiRepository.getApi(film.providerId)!!
+                            val api = providerApiRepository.getApi(film.providerId)
+                                ?: return@withContext Resource.Failure(UiText.from(R.string.film_not_found))
                             val filmMetadata = api.getMetadata(film)
 
                             Resource.Success(filmMetadata)

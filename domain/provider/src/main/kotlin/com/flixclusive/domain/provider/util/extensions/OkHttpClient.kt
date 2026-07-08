@@ -13,7 +13,7 @@ internal fun OkHttpClient.downloadProvider(
     buildUrl: String,
 ) {
     val updaterJsonUrl = getUpdaterJsonUrl(buildUrl)
-    val updaterFile = File(saveTo.parent!!.plus("/${Constants.UPDATER_FILE}"))
+    val updaterFile = File((saveTo.parent ?: saveTo.absolutePath).plus("/${Constants.UPDATER_FILE}"))
 
     download(
         file = saveTo,
@@ -47,7 +47,7 @@ private fun OkHttpClient.download(
         var backupFile: File? = null
         file.mkdirs()
         if (file.exists()) {
-            backupFile = File(file.parent!!.plus("/${file.name}.old"))
+            backupFile = File((file.parent ?: file.absolutePath).plus("/${file.name}.old"))
             file.renameTo(backupFile)
             file.delete()
         }

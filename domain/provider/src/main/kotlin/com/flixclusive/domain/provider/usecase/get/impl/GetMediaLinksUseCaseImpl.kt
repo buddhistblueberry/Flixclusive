@@ -177,9 +177,9 @@ internal class GetMediaLinksUseCaseImpl
                         return false
                     }
 
-                    response.data!!
+                    response.data ?: return false
                 } else {
-                    watchId!!
+                    watchId ?: return false
                 }
 
                 cachedLinksRepository.storeCache(

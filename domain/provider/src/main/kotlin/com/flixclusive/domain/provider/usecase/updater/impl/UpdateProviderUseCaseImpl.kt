@@ -156,11 +156,11 @@ internal class UpdateProviderUseCaseImpl
                             provider.name,
                             provider.id,
                         ),
-                        cause = e.cause!!,
+                        cause = e.cause ?: e,
                     )
                 } catch (e: UnloadException) {
                     Throwable(
-                        cause = e.cause!!,
+                        cause = e.cause ?: e,
                         message = context.getString(
                             R.string.unload_exception_message,
                             provider.name,
@@ -175,7 +175,7 @@ internal class UpdateProviderUseCaseImpl
                             provider.name,
                             provider.id,
                         ),
-                        cause = e.cause!!,
+                        cause = e.cause ?: e,
                     )
                 } catch (e: Throwable) {
                     e

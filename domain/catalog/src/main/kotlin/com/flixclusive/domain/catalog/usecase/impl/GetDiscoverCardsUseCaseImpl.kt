@@ -20,9 +20,7 @@ internal class GetDiscoverCardsUseCaseImpl
 
         override suspend operator fun invoke(): Resource<DiscoverCards> {
             return try {
-                if (cards != null) {
-                    return Resource.Success(cards!!)
-                }
+                cards?.let { return Resource.Success(it) }
 
                 usedThumbnails.clear()
 

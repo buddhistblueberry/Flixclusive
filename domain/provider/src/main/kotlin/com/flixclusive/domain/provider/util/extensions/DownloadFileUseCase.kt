@@ -16,9 +16,10 @@ fun DownloadFileUseCase.downloadProvider(
     file: File,
     metadata: ProviderMetadata,
 ): Flow<Pair<DownloadState, DownloadState>> {
+    val parentPath = file.parent ?: throw IllegalStateException("File has no parent directory")
     val providerDownloadRequest = DownloadRequest.from(
         url = metadata.buildUrl,
-        destinationPath = file.parent!!,
+        destinationPath = parentPath,
         fileName = file.name,
     )
 
@@ -31,7 +32,7 @@ fun DownloadFileUseCase.downloadProvider(
 
     val updaterJsonDownloadRequest = DownloadRequest.from(
         url = updaterUrl,
-        destinationPath = file.parent!!,
+        destinationPath = parentPath,
         fileName = Constants.UPDATER_FILE,
     )
 

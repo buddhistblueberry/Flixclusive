@@ -31,7 +31,8 @@ internal class PaginateItemsUseCaseImpl
             return when (catalog) {
                 is ProviderCatalog -> {
                     return try {
-                        val api = catalog.providerApi!!
+                        val api = catalog.providerApi
+                            ?: return Resource.Failure(UiText.StringResource(R.string.failed_to_fetch_catalog_items_format_message))
                         val items = withContext(appDispatchers.io) {
                             api.getCatalogItems(
                                 page = page,

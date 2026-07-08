@@ -61,7 +61,7 @@ internal class CheckOutdatedProviderUseCaseImpl
                 )
             }
 
-            val updatedMetadata = response.data!!
+            val updatedMetadata = response.data ?: return false
 
             return manifest.versionCode < updatedMetadata.versionCode
         }

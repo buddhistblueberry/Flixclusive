@@ -33,8 +33,9 @@ internal class GetSeasonWithWatchProgressUseCaseImpl
                 var season = tvShow.seasons.find { it.number == number }
 
                 if ((season == null || season.episodes.isEmpty()) && tvShow.isFromTmdbSource) {
+                    val tmdbId = tvShow.tmdbId ?: return@channelFlow
                     val tmdbSeason = tmdbMetadataRepository.getSeason(
-                        id = tvShow.tmdbId!!,
+                        id = tmdbId,
                         seasonNumber = number,
                     )
 
@@ -51,7 +52,7 @@ internal class GetSeasonWithWatchProgressUseCaseImpl
                     return@channelFlow
                 }
 
-                val user = userSessionManager.currentUser.value!!
+                val user = userSessionManager.currentUser.value ?: return@channelFlow
                 watchProgressRepository.getSeasonProgressAsFlow(
                     tvShowId = tvShow.identifier,
                     seasonNumber = number,

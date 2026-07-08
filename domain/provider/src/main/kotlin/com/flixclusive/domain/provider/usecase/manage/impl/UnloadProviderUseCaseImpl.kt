@@ -81,9 +81,9 @@ internal class UnloadProviderUseCaseImpl
             file.delete()
 
             // Delete updater.json file if its the only thing remaining on that directory
-            val parentDirectory = file.parentFile!!
+            val parentDirectory = file.parentFile ?: return
             if (parentDirectory.isDirectory && parentDirectory.listFiles()?.size == 1) {
-                val lastRemainingFile = parentDirectory.listFiles()!![0]
+                val lastRemainingFile = parentDirectory.listFiles()?.firstOrNull() ?: return
 
                 if (lastRemainingFile.name.equals(Constants.UPDATER_FILE, true)) {
                     rmrf(parentDirectory)
