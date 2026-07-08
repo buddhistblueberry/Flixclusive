@@ -81,27 +81,26 @@ internal fun LazyGridScope.seriesContent(
         }
 
         seasonToDisplay is Resource.Success -> {
-            val season = seasonToDisplay.data
-            if (season == null) return@when
-            season.overview?.let {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
-                        text = it,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(
-                            bottom = 10.dp,
-                            start = DefaultScreenPaddingHorizontal,
-                            end = DefaultScreenPaddingHorizontal,
-                        ),
-                        style = MaterialTheme.typography.bodySmall
-                            .copy(color = LocalContentColor.current.copy(0.6f))
-                            .asAdaptiveTextStyle(),
-                    )
+            seasonToDisplay.data?.let { season ->
+                season.overview?.let { overview ->
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Text(
+                            text = overview,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(
+                                bottom = 10.dp,
+                                start = DefaultScreenPaddingHorizontal,
+                                end = DefaultScreenPaddingHorizontal,
+                            ),
+                            style = MaterialTheme.typography.bodySmall
+                                .copy(color = LocalContentColor.current.copy(0.6f))
+                                .asAdaptiveTextStyle(),
+                        )
+                    }
                 }
-            }
 
-            items(
-                items = season.episodes,
+                items(
+                    items = season.episodes,
                 key = { episode -> episode.number },
             ) { item ->
                 EpisodeCard(
@@ -112,6 +111,7 @@ internal fun LazyGridScope.seriesContent(
                         .fillMaxWidth()
                         .animateItem(),
                 )
+            }
             }
         }
     }
