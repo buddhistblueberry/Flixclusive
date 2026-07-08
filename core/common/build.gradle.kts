@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     alias(libs.plugins.flixclusive.library)
     alias(libs.plugins.flixclusive.compose)
@@ -6,6 +8,22 @@ plugins {
 
 android {
     namespace = "com.flixclusive.core.common"
+
+    defaultConfig {
+        val token = try {
+            val properties = Properties()
+            properties.load(project.rootProject.file("local.properties").inputStream())
+            properties.getProperty("GITHUB_TOKEN", "")
+        } catch (_: Exception) {
+            ""
+        }
+
+        buildConfigField("String", "GITHUB_TOKEN", "\"$token\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
