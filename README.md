@@ -1,5 +1,27 @@
 ![Flixclusive logo](https://i.imgur.com/tizcKbi.png)
 
+# ⚠️ Fork Notice - Vibe-Coded Debug Build
+
+> **This is a fork** of [flixclusiveorg/Flixclusive](https://github.com/flixclusiveorg/Flixclusive) created for **debugging and testing purposes**.
+
+## 📱 About This Fork
+
+This repository contains modifications to help debug crashes and test fixes for the Flixclusive Android app. Changes here are experimental and meant for personal use.
+
+### 🤖 AI-Assisted Development (Vibe-Coded)
+
+This fork was developed with heavy assistance from AI coding tools. The modifications, bug fixes, and workflow changes were guided by AI pair programming.
+
+### 🙏 Support the Original Creator
+
+If you find Flixclusive useful, please:
+- ⭐ Star the original repo: [flixclusiveorg/Flixclusive](https://github.com/flixclusiveorg/Flixclusive)
+- 💬 Join their Discord: [Flixclusive Community](https://discord.gg/7yPSPveReu)
+- 🐛 Report issues to the original repo, not this fork
+- 💰 Consider supporting the maintainers if they have donation links
+
+---
+
 <div>
   <table>
     <tr>
