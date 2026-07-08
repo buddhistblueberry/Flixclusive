@@ -4,14 +4,19 @@ import com.flixclusive.core.common.exception.CrashReportSender
 import com.flixclusive.core.util.network.okhttp.HttpMethod
 import com.flixclusive.core.util.network.okhttp.formRequest
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isTrue
 
-private const val REMOTE_FORM_URL =
-    "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfTVmgiOeF7RlDbjBR10RQG6C6uKioSk-toqKecPvpkAe9ffw/formResponse?pli=1"
+private const val GITHUB_API_BASE = "https://api.github.com"
+private const val REPO_OWNER = "buddhistblueberry"
+private const val REPO_NAME = "Flixclusive"
 
 class CrashReportSenderTest : CrashReportSender {
     private lateinit var client: OkHttpClient
@@ -44,12 +49,32 @@ class CrashReportSenderTest : CrashReportSender {
     }
 
     override suspend fun send(errorLog: String) {
-        val response = client.formRequest(
-            url = REMOTE_FORM_URL,
-            method = HttpMethod.POST,
-            body = mapOf("entry.1687138646" to errorLog)
-        ).execute()
+        val title = "Test Crash: ${errorLog.lines().firstOrNull()?.take(80) ?: "Unknown"}"
+        val body = """
+            ## Test Crash Report
+            
+            ```
+            $errorLog
+            ```
+            
+            _Auto-reported by test suite_
+        """.trimIndent()
 
+        val json = JSONObject()
+            .put("title", title)
+            .put("body", body)
+
+        val requestBody = json.toString()
+            .toRequestBody("application/json".toMediaType())
+
+        val request = Request.Builder()
+            .url("$GITHUB_API_BASE/repos/$REPO_OWNER/$REPO_NAME/issues")
+            .header("Authorization", "Bearer ${System.getenv("GITHUB_TOKEN") ?: ""}")
+            .header("Accept", "application/vnd.github.v3+json")
+            .post(requestBody)
+            .build()
+
+        val response = client.newCall(request).execute()
         expectThat(response.isSuccessful).isTrue()
     }
 }

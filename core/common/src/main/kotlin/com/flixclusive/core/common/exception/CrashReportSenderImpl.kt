@@ -1,18 +1,22 @@
 package com.flixclusive.core.common.exception
 
 import android.content.Context
+import com.flixclusive.core.common.BuildConfig
 import com.flixclusive.core.common.R
 import com.flixclusive.core.common.dispatchers.AppDispatchers
 import com.flixclusive.core.util.android.showToast
-import com.flixclusive.core.util.network.okhttp.HttpMethod
-import com.flixclusive.core.util.network.okhttp.formRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import javax.inject.Inject
 
-private const val REMOTE_FORM_URL =
-    "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfTVmgiOeF7RlDbjBR10RQG6C6uKioSk-toqKecPvpkAe9ffw/formResponse?pli=1"
+private const val GITHUB_API_BASE = "https://api.github.com"
+private const val REPO_OWNER = "buddhistblueberry"
+private const val REPO_NAME = "Flixclusive"
 
 internal class CrashReportSenderImpl
     @Inject
@@ -23,22 +27,42 @@ internal class CrashReportSenderImpl
     ) : CrashReportSender {
         override suspend fun send(errorLog: String) {
             withContext(dispatchers.io) {
-                val response = client
-                    .formRequest(
-                        url = REMOTE_FORM_URL,
-                        method = HttpMethod.POST,
-                        body = mapOf("entry.1687138646" to errorLog),
-                    ).execute()
+                val token = BuildConfig.GITHUB_TOKEN
+                if (token.isBlank()) {
+                    withContext(dispatchers.main) {
+                        context.showToast("No GITHUB_TOKEN configured — crash not reported")
+                    }
+                    return@withContext
+                }
 
-                val responseString = response.body.string()
+                val title = "Crash Report: ${errorLog.lines().firstOrNull()?.take(80) ?: "Unknown"}"
+                val body = """
+                    ## Crash Report
+                    
+                    ```
+                    $errorLog
+                    ```
+                    
+                    _Auto-reported by Flixclusive Crash Reporter_
+                """.trimIndent()
 
-                val isSent = response.isSuccessful &&
-                    (
-                        responseString.contains("form_confirm", true) ||
-                            responseString.contains("submit another response", true)
-                    )
+                val json = JSONObject()
+                    .put("title", title)
+                    .put("body", body)
 
-                if (!isSent) {
+                val requestBody = json.toString()
+                    .toRequestBody("application/json".toMediaType())
+
+                val request = Request.Builder()
+                    .url("$GITHUB_API_BASE/repos/$REPO_OWNER/$REPO_NAME/issues")
+                    .header("Authorization", "Bearer $token")
+                    .header("Accept", "application/vnd.github.v3+json")
+                    .post(requestBody)
+                    .build()
+
+                val response = client.newCall(request).execute()
+
+                if (!response.isSuccessful) {
                     withContext(dispatchers.main) {
                         val errorMessage = context.getString(R.string.failed_to_send_crash_report)
                         context.showToast(errorMessage)
