@@ -33,7 +33,9 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "TMDB_API_KEY=a3c807a11279035d3214453354ae70f2" >> local.properties
 
       - name: Assemble debug APK
         run: ./gradlew :app-mobile:assembleDebug --stacktrace --info
