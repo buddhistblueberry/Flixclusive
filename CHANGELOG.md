@@ -1,46 +1,53 @@
-# Changelog - Flixclusive Debug Build
+# Changelog
 
-## [2.2.0-debug] - 2026-07-08
+All notable changes to this project will be documented in this file.
 
-### 🔧 Bug Fixes
-- **Fixed NullPointerException** in `GetMediaLinksUseCase` (#147)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Fixed
+- PlayerTweakScreen crash when changing Resize Mode (`#2`)
+  - Missing `.value` for `selectedResizeMode.uiText`
+  - `IllegalArgumentException: Unsupported type`
+
+### Changed
+- Improved retry logic for header loading (20 → 50 attempts)
+- Lowered minimum vote count threshold for content filtering
+
+---
+
+## [1.0.0] - 2026-07-08
+
+### Added
+- Initial debug fork release
+- Pre-configured TMDB API key
+- GitHub Actions CI/CD pipeline
+- Auto-release workflow
+- Crash reporting to GitHub Issues
+- English-only build (reduced APK size)
+- ARM64-only build (optimized for modern devices)
+
+### Fixed
+- NullPointerException in `GetMediaLinksUseCase` (`#147`)
   - Null check for `tmdbId` before fetching watch providers
   - Safe handling of WebView instantiation
-- **Fixed "Failed to find suitable header item"** error on home screen
+- "Failed to find suitable header item" error on home screen
   - Simplified header selection to use `FilmSearchItem` directly
-  - Increased retry attempts from 20 to 50
-  - Reduced minimum vote count threshold from 250 to 50
 
-### ⚡ Optimizations
-- **English-only build** - Removed other languages to reduce APK size
-- **arm64-only build** - Only built for ARM64 architecture (your device)
-
-### 🎁 Features
-- **Pre-configured TMDB API key** - No manual setup needed
-- **Debug build** - Includes crash logging for debugging
-
-### 📝 Documentation
-- Added fork notice and vibe-coded disclaimer to README
-- Added CHANGELOG.md
-
-### 🏗️ Build System
-- Simplified GitHub Actions workflow (skip tests for faster builds)
-- Added Android SDK setup step
-- Added APK artifact upload
-- Fixed JAVA_HOME configuration
+### Changed
+- Increased retry attempts from 20 to 50 for header loading
+- Reduced minimum vote count threshold from 250 to 50
 
 ---
 
-## Previous Changes (from upstream)
-- See [flixclusiveorg/Flixclusive](https://github.com/flixclusiveorg/Flixclusive) for original changelog
+## [0.0.1] - 2026-07-08
 
----
+### Added
+- Forked from [flixclusiveorg/Flixclusive](https://github.com/flixclusiveorg/Flixclusive)
+- Initial setup and configuration
 
-## 🐛 Known Issues
-- Provider loading may fail if no providers are configured
-- Some UI elements may not render correctly on older Android versions
-
-## 📱 Installation
-1. Download `flixclusive-debug.apk` from [Releases](https://github.com/buddhistblueberry/Flixclusive/releases)
-2. Enable "Install from unknown sources" in Settings
-3. Open the APK and click Install
+[Unreleased]: https://github.com/buddhistblueberry/Flixclusive/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/buddhistblueberry/Flixclusive/releases/tag/v1.0.0
+[0.0.1]: https://github.com/buddhistblueberry/Flixclusive/releases/tag/v0.0.1
