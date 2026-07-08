@@ -192,11 +192,11 @@ private fun ProviderUsed(
             .clickable { onClick() }
             .padding(3.dp),
     ) {
-        if (provider.id != DEFAULT_FILM_SOURCE_NAME) {
+        if (provider?.id != DEFAULT_FILM_SOURCE_NAME) {
             ImageWithSmallPlaceholder(
-                model = context.buildImageRequest(provider.iconUrl),
+                model = context.buildImageRequest(provider?.iconUrl),
                 placeholder = painterResource(UiCommonR.drawable.movie_icon),
-                contentDescription = provider.name,
+                contentDescription = provider?.name,
                 placeholderSize = 12.dp,
                 shape = MaterialTheme.shapes.extraSmall,
                 modifier = Modifier

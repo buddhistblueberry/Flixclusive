@@ -81,7 +81,7 @@ internal fun LazyGridScope.seriesContent(
         }
 
         seasonToDisplay is Resource.Success -> {
-            val season = seasonToDisplay.data ?: return@LazyVerticalGrid
+            val season = seasonToDisplay.data
             season.overview?.let {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(
