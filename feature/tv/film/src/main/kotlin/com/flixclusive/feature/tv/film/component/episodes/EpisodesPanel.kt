@@ -213,7 +213,8 @@ internal fun EpisodesPanel(
             }
 
             if (currentSelectedSeason is Resource.Success) {
-                itemsIndexed(currentSelectedSeason.data!!.episodes) { i, episode ->
+                val episodes = currentSelectedSeason.data?.episodes ?: emptyList()
+                itemsIndexed(episodes) { i, episode ->
                     val currentFocusPosition = remember { String.format(EPISODES_PANEL_FOCUS_KEY_FORMAT, 1, episode.number) }
 
                     EpisodeCard(

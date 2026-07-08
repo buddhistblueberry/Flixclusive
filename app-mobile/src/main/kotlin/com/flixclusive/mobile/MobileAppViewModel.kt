@@ -169,10 +169,15 @@ internal class MobileAppViewModel @Inject constructor(
 
                     playerData = playerData.copy(episode = episodeToLoad)
 
-                    getMediaLinks(
-                        tvShow = metadata,
-                        episode = episodeToLoad!!,
-                    )
+                    episodeToLoad?.let { episode ->
+                        getMediaLinks(
+                            tvShow = metadata,
+                            episode = episode,
+                        )
+                    } ?: run {
+                        updateLoadLinksState(LoadLinksState.Error(IllegalStateException("Episode is null")))
+                        return@launch
+                    }
                 }
 
                 else -> error("This is not a valid FilmMetadata subclass: $metadata")
@@ -222,7 +227,7 @@ internal class MobileAppViewModel @Inject constructor(
             }
 
             is Resource.Success -> {
-                val season = response.data!!
+                val season = response.data ?: return Result.failure(ExceptionWithUiText(UiText.from(LocaleR.string.unavailable_episode)))
                 val episodeWithProgress = season.episodes.fastFirstOrNull { it.number == episodeNumber }
 
                 if (episodeWithProgress == null) {

@@ -61,17 +61,21 @@ fun UserAvatar(
 
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface.copy(0.8F)
     val borderColor = remember(avatarId) {
-        val drawable = ContextCompat.getDrawable(context, avatarId)!!
+        val drawable = ContextCompat.getDrawable(context, avatarId)
 
-        val palette = Palette
-            .from(drawable.toBitmap())
-            .generate()
+        if (drawable != null) {
+            val palette = Palette
+                .from(drawable.toBitmap())
+                .generate()
 
-        Color(
-            palette.darkVibrantSwatch?.titleTextColor
-                ?: palette.darkMutedSwatch?.titleTextColor
-                ?: onSurfaceColor.toArgb(),
-        )
+            Color(
+                palette.darkVibrantSwatch?.titleTextColor
+                    ?: palette.darkMutedSwatch?.titleTextColor
+                    ?: onSurfaceColor.toArgb(),
+            )
+        } else {
+            onSurfaceColor
+        }
     }
 
     Box(
@@ -103,12 +107,14 @@ fun getUserBackgroundPalette(avatar: Int): Palette {
     val context = LocalContext.current
 
     val avatarId = context.getAvatarResource(avatar)
-    val drawable = ContextCompat.getDrawable(context, avatarId)!!
+    val drawable = ContextCompat.getDrawable(context, avatarId)
 
     return remember {
-        Palette
-            .from(drawable.toBitmap())
-            .generate()
+        drawable?.let {
+            Palette
+                .from(it.toBitmap())
+                .generate()
+        } ?: Palette.from(0xFF6200EE.toInt()).generate()
     }
 }
 

@@ -297,9 +297,10 @@ private fun CardOverview(
                     }
 
                     if(seasons != null) {
-                        var seasonsRuntime = UiText.StringResource(LocaleR.string.season_runtime_formatter, seasons!!).asString(context)
+                        val seasonCount = seasons!!
+                        var seasonsRuntime = UiText.StringResource(LocaleR.string.season_runtime_formatter, seasonCount).asString(context)
 
-                        if(seasons!! > 1)
+                        if(seasonCount > 1)
                             seasonsRuntime += 's'
 
                         add(seasonsRuntime)

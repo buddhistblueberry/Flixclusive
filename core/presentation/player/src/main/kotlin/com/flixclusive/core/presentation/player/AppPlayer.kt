@@ -155,7 +155,8 @@ class AppPlayer(
         }
 
         infoLog("Initializing the media session...")
-        mediaSession = MediaSession.Builder(context, exoPlayer!!).build()
+        val player = exoPlayer ?: return
+        mediaSession = MediaSession.Builder(context, player).build()
 
         subtitleView?.let {
             infoLog("Initializing SubtitleView...")

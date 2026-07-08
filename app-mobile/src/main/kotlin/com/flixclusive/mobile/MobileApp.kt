@@ -274,8 +274,8 @@ internal fun MobileActivity.MobileApp(viewModel: MobileAppViewModel) {
     }
 
     if (currentSelectedScreen != PlayerScreenDestination) {
-        if (uiState.filmPreviewState != null) {
-            val film = uiState.filmPreviewState!!.film
+        uiState.filmPreviewState?.let { previewState ->
+            val film = previewState.film
 
             val navigateToFilmScreen = dropUnlessResumed {
                 when (currentNavGraph) {
@@ -299,7 +299,7 @@ internal fun MobileActivity.MobileApp(viewModel: MobileAppViewModel) {
             }
 
             FilmPreviewBottomSheet(
-                preview = uiState.filmPreviewState!!,
+                preview = previewState,
                 sheetState = bottomSheetState,
                 onSeeMoreClick = {
                     navigateToFilmScreen()
@@ -336,9 +336,7 @@ internal fun MobileActivity.MobileApp(viewModel: MobileAppViewModel) {
                 subtitles = cachedLinks?.subtitles ?: emptyList(),
                 onLinkClick = { /*TODO: Add link chooser navigation for player screen*/ },
                 onSkipLoading = {
-                    if (uiState.playerData != null) {
-                        onStartPlayer(uiState.playerData!!)
-                    }
+                    uiState.playerData?.let { onStartPlayer(it) }
                 },
                 onDismiss = {
                     viewModel.onStopLoadingLinks(isForceClosing = true)
@@ -366,9 +364,9 @@ internal fun MobileActivity.MobileApp(viewModel: MobileAppViewModel) {
             }
         }
 
-        if (webViewDriver != null) {
+        webViewDriver?.let { webView ->
             WebViewDriverDialog(
-                webView = webViewDriver!!,
+                webView = webView,
                 onDismiss = viewModel::hideWebViewDriver,
             )
         }
