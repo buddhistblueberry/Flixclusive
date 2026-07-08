@@ -16,7 +16,8 @@ import com.flixclusive.model.film.util.FilmType
 import javax.inject.Inject
 import kotlin.random.Random
 
-private const val MAX_RETRIES = 20
+private const val MAX_RETRIES = 50
+private const val MIN_VOTE_COUNT = 50
 private typealias CatalogUrl = String
 private typealias FilmId = String
 
@@ -59,21 +60,21 @@ internal class GetHomeHeaderUseCaseImpl
 
                         traversedFilms.add(headerItem.identifier)
 
-                        if (headerItem.isNotPopular) {
-                            return@forEach
+                        // Try to get metadata, but use search item as fallback
+                        val metadata = getMetadata(headerItem)
+                        
+                        // Create a Film object from headerItem (with metadata if available)
+                        val film = if (metadata != null) {
+                            when (metadata) {
+                                is Movie -> metadata.copy(genres = metadata.genres)
+                                is TvShow -> metadata.copy(genres = metadata.genres)
+                                else -> createFilmFromSearchItem(headerItem)
+                            }
+                        } else {
+                            createFilmFromSearchItem(headerItem)
                         }
 
-                        val metadata = getMetadata(headerItem) ?: return@forEach
-
-                        val enhancedMetadata = when (metadata) {
-                            is Movie -> metadata.copy(genres = metadata.genres)
-                            is TvShow -> metadata.copy(genres = metadata.genres)
-                            else -> throw IllegalArgumentException(
-                                "Unsupported FilmMetadata type: ${metadata::class.java.simpleName}",
-                            )
-                        }
-
-                        return Resource.Success(enhancedMetadata)
+                        return Resource.Success(film)
                     }
                 } catch (e: Exception) {
                     lastError = e
@@ -104,7 +105,62 @@ internal class GetHomeHeaderUseCaseImpl
             get() =
                 safeCall {
                     (this as? FilmSearchItem)?.run {
-                        isFromTmdb && voteCount < 250
+                        isFromTmdb && voteCount < MIN_VOTE_COUNT
                     } == true
                 } == true
+    
+        private fun createFilmFromSearchItem(item: FilmSearchItem): Film {
+            return when (item.filmType) {
+                FilmType.MOVIE -> Movie(
+                    identifier = item.identifier,
+                    tmdbId = item.tmdbId,
+                    title = item.name,
+                    posterImage = item.posterImage,
+                    backdropImage = item.backdropImage,
+                    releaseDate = item.releaseDate,
+                    rating = item.rating,
+                )
+                FilmType.TV_SHOW -> TvShow(
+                    identifier = item.identifier,
+                    tmdbId = item.tmdbId,
+                    name = item.name,
+                    posterImage = item.posterImage,
+                    backdropImage = item.backdropImage,
+                    firstAirDate = item.releaseDate,
+                    rating = item.rating,
+                )
+            }
+        }
+
+        /**
+         * Convert Film to a basic Film object for fallback
+         */
+        private fun Film.toFilm(): Film? {
+            return when (this) {
+                is FilmSearchItem -> {
+                    if (this.filmType == FilmType.MOVIE) {
+                        Movie(
+                            identifier = this.identifier,
+                            tmdbId = this.tmdbId,
+                            title = this.name,
+                            posterImage = this.posterImage,
+                            backdropImage = this.backdropImage,
+                            releaseDate = this.releaseDate,
+                            rating = this.rating,
+                        )
+                    } else {
+                        TvShow(
+                            identifier = this.identifier,
+                            tmdbId = this.tmdbId,
+                            name = this.name,
+                            posterImage = this.posterImage,
+                            backdropImage = this.backdropImage,
+                            firstAirDate = this.releaseDate,
+                            rating = this.rating,
+                        )
+                    }
+                }
+                else -> this
+            }
+        }
     }
