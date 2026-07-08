@@ -251,10 +251,11 @@ private fun UserProfilesScreenContent(
                                             isLoading = uiState.isLoading,
                                             onBack = { screenType = lastScreenTypeUsed },
                                             onConfirm = {
-                                                if (profile.pin.isNullOrEmpty()) {
+                                                val pin = profile.pin
+                                                if (pin.isNullOrEmpty()) {
                                                     onUseProfile(profile)
                                                 } else {
-                                                    navigator.openUserPinScreen(PinAction.Verify(profile.pin!!))
+                                                    navigator.openUserPinScreen(PinAction.Verify(pin))
                                                 }
                                             },
                                         )

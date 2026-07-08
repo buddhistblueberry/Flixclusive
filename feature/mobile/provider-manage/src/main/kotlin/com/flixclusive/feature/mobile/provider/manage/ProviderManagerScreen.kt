@@ -309,8 +309,8 @@ internal fun ProviderManagerScreenContent(
         }
     }
 
-    if (providerToUninstall != null) {
-        val metadata = remember { providerToUninstall!! }
+    providerToUninstall?.let { uninstall ->
+        val metadata = remember { uninstall }
 
         IconAlertDialog(
             painter = painterResource(id = UiCommonR.drawable.warning),

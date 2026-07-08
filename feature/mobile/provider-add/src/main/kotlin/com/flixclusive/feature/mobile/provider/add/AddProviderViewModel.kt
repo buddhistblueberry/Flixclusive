@@ -354,14 +354,14 @@ internal class AddProviderViewModel @Inject constructor(
             when (val result = getProviderFromRemote(repository)) {
                 Resource.Loading -> Unit
                 is Resource.Failure -> {
-                    val pair = repository to result.error!!
+                    val pair = repository to (result.error ?: UiText.from(R.string.unknown_error))
                     _uiState.update {
                         it.copy(repositoryExceptions = it.repositoryExceptions + pair)
                     }
                 }
 
                 is Resource.Success -> {
-                    val providers = result.data!!
+                    val providers = result.data ?: emptyList()
 
                     providers.fastForEach {
                         val provider = SearchableProvider.from(it)
@@ -370,7 +370,7 @@ internal class AddProviderViewModel @Inject constructor(
                         val metadata = providerRepository.getProviderMetadata(provider.id)
                         val isInstalled = metadata != null
 
-                        if (isInstalled && isOutdated(old = metadata!!, new = provider.metadata)) {
+                        if (isInstalled && metadata != null && isOutdated(old = metadata, new = provider.metadata)) {
                             status = ProviderInstallationStatus.Outdated
                         } else if (isInstalled) {
                             status = ProviderInstallationStatus.Installed

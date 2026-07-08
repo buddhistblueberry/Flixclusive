@@ -135,7 +135,8 @@ private fun AppUpdatesScreenContent(
     }
 
     fun startInstallation() {
-        val uri = downloadState.file!!.toUri(
+        val file = downloadState.file ?: return
+        val uri = file.toUri(
             applicationId,
             context,
         )

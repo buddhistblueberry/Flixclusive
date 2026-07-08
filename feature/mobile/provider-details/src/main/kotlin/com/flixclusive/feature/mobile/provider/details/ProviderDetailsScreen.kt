@@ -244,9 +244,9 @@ private fun ProviderDetailsScreenContent(
                                 label = stringResource(id = LocaleR.string.whats_new),
                                 onClick = {
                                     with(metadata) {
-                                        if (changelog != null) {
-                                            onViewMarkdown(name, changelog!!)
-                                        } else {
+                                        changelog?.let {
+                                            onViewMarkdown(name, it)
+                                        } ?: run {
                                             scope.launch {
                                                 val message = resources.getString(LocaleR.string.no_changelogs)
                                                 snackbarHostState.showMessage(message)

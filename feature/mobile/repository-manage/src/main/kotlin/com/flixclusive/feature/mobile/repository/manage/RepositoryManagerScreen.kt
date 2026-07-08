@@ -267,11 +267,7 @@ private fun RepositoryManagerScreenContent(
             tint = MaterialTheme.colorScheme.error,
             description = stringResource(LocaleR.string.action_warning_default_message),
             onConfirm = {
-                if (repositoryToRemove != null) {
-                    onRemoveRepository(repositoryToRemove!!)
-                } else {
-                    onRemoveSelection()
-                }
+                repositoryToRemove?.let { onRemoveRepository(it) } ?: onRemoveSelection()
             },
             onDismiss = {
                 isAlertDialogOpened = false

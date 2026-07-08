@@ -64,8 +64,10 @@ class AppUpdatesViewModel
                             _uiState.update { AppUpdatesUiState.UpToDate }
                         }
                     }.onFailure { error ->
+                        val uiText = (error as? ExceptionWithUiText)?.uiText
+                            ?: UiText.from(error.message ?: "Unknown error")
                         _uiState.update {
-                            AppUpdatesUiState.Error((error as ExceptionWithUiText).uiText!!)
+                            AppUpdatesUiState.Error(uiText)
                         }
                     }
             }
