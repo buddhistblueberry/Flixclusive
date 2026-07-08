@@ -181,13 +181,13 @@ internal fun SettingsScreen(
                         }
                     }
 
-                    if (screen != null) {
+                    screen?.let { currentScreen ->
                         val isListVisible =
                             scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.List] ==
                                 PaneAdaptedValue.Expanded
 
                         AnimatedContent(
-                            targetState = screen!!,
+                            targetState = currentScreen,
                             label = "DetailsContent",
                             transitionSpec = {
                                 val spring = spring<IntOffset>(Spring.DampingRatioLowBouncy)

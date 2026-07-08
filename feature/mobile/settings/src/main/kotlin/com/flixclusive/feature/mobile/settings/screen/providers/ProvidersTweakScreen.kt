@@ -47,7 +47,7 @@ internal class ProvidersTweakScreen(
     @Composable
     override fun getTweaks(): List<Tweak> {
         val context = LocalContext.current
-        val navigator = LocalSettingsNavigator.current!!
+        val navigator = LocalSettingsNavigator.current ?: return emptyList()
         val providerPreferences = preferencesAsState.collectAsStateWithLifecycle()
 
         return listOf(

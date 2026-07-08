@@ -153,8 +153,9 @@ internal fun ListContent(
             items(buttons) { navigation ->
                 if (navigation.isSubNavigation) return@items
 
+                val iconPainter = navigation.getIconPainter() ?: return@items
                 MenuItem(
-                    icon = navigation.getIconPainter()!!,
+                    icon = iconPainter,
                     label = navigation.getTitle(),
                     onClick = {
                         if (navigation is BaseTweakNavigation) {

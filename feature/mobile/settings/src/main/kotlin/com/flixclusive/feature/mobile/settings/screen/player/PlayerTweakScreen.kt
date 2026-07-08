@@ -71,7 +71,7 @@ internal class PlayerTweakScreen(
     @Composable
     private fun getGeneralTweaks(playerPreferences: () -> PlayerPreferences): TweakGroup {
         val context = LocalContext.current
-        val navigator = LocalScaffoldNavigator.current!!
+        val navigator = LocalScaffoldNavigator.current ?: return TweakGroup(title = "", tweaks = persistentListOf())
 
         val scope = rememberCoroutineScope()
 
