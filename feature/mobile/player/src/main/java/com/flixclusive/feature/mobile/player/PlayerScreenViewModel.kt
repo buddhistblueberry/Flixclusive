@@ -60,7 +60,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -88,12 +88,7 @@ internal class PlayerScreenViewModel @Inject constructor(
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = runBlocking {
-            dataStoreManager.getUserPrefs(
-                key = UserPreferences.PLAYER_PREFS_KEY,
-                type = PlayerPreferences::class,
-            ).first()
-        },
+        initialValue = PlayerPreferences(),
     )
 
     val subtitlesPreferences = dataStoreManager.getUserPrefs(
@@ -102,12 +97,7 @@ internal class PlayerScreenViewModel @Inject constructor(
     ).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = runBlocking {
-            dataStoreManager.getUserPrefs(
-                key = UserPreferences.SUBTITLES_PREFS_KEY,
-                type = SubtitlesPreferences::class,
-            ).first()
-        },
+        initialValue = SubtitlesPreferences(),
     )
 
     val player by lazy {

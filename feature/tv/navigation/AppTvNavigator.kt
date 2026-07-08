@@ -25,7 +25,8 @@ internal class AppTvNavigator(
     }
 
     override fun openProfilesScreen(shouldPopBackStack: Boolean) {
-        TODO("Not yet implemented")
+        // TODO: Implement TV profile screen navigation
+        // No-op for now to prevent crash
     }
 
     override fun openFilmScreen(film: Film) {
@@ -110,7 +111,8 @@ internal class AppTvNavigator(
     }
 
     override fun openAddProfileScreen(isInitializing: Boolean) {
-        TODO("Not yet implemented")
+        // TODO: Implement TV add profile screen navigation
+        // No-op for now to prevent crash
     }
 
     override fun onExitApplication() {
