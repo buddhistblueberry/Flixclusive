@@ -114,7 +114,7 @@ internal class GetHomeHeaderUseCaseImpl
                 FilmType.MOVIE -> Movie(
                     identifier = item.identifier,
                     tmdbId = item.tmdbId,
-                    title = item.name,
+                    title = item.title,
                     posterImage = item.posterImage,
                     backdropImage = item.backdropImage,
                     releaseDate = item.releaseDate,
@@ -123,7 +123,7 @@ internal class GetHomeHeaderUseCaseImpl
                 FilmType.TV_SHOW -> TvShow(
                     identifier = item.identifier,
                     tmdbId = item.tmdbId,
-                    name = item.name,
+                    name = item.title,
                     posterImage = item.posterImage,
                     backdropImage = item.backdropImage,
                     firstAirDate = item.releaseDate,
@@ -142,7 +142,7 @@ internal class GetHomeHeaderUseCaseImpl
                         Movie(
                             identifier = this.identifier,
                             tmdbId = this.tmdbId,
-                            title = this.name,
+                            title = this.title,
                             posterImage = this.posterImage,
                             backdropImage = this.backdropImage,
                             releaseDate = this.releaseDate,
@@ -152,7 +152,7 @@ internal class GetHomeHeaderUseCaseImpl
                         TvShow(
                             identifier = this.identifier,
                             tmdbId = this.tmdbId,
-                            name = this.name,
+                            name = this.title,
                             posterImage = this.posterImage,
                             backdropImage = this.backdropImage,
                             firstAirDate = this.releaseDate,
