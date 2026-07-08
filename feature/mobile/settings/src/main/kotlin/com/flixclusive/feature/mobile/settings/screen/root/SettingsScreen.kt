@@ -232,28 +232,30 @@ private fun getAdaptiveBackground(currentUser: User?): Brush {
     val primaryColor = MaterialTheme.colorScheme.primary.copy(0.3F)
 
     return remember(currentUser?.image) {
-        val colors =
-            if (currentUser != null) {
-                val avatarId = context.getAvatarResource(currentUser.image)
-                val drawable = ContextCompat.getDrawable(context, avatarId)
+        val colors = if (currentUser != null) {
+            val avatarId = context.getAvatarResource(currentUser.image)
+            val drawable = ContextCompat.getDrawable(context, avatarId)
 
-                if (drawable != null) {
-                    val palette =
-                        Palette
-                            .from(drawable.toBitmap())
-                            .generate()
+            if (drawable != null) {
+                val palette =
+                    Palette
+                        .from(drawable.toBitmap())
+                        .generate()
 
-                    val backgroundColor = Color(palette.dominantSwatch?.rgb ?: surfaceColor.toArgb())
-                    val tubeLightColor = Color(palette.lightVibrantSwatch?.rgb ?: surfaceColor.toArgb())
+                val backgroundColor = Color(palette.dominantSwatch?.rgb ?: surfaceColor.toArgb())
+                val tubeLightColor = Color(palette.lightVibrantSwatch?.rgb ?: surfaceColor.toArgb())
 
-                    listOf(
-                        tubeLightColor.copy(0.5F),
+                listOf(
+                    tubeLightColor.copy(0.5F),
                     backgroundColor.copy(0.2F),
                     surfaceColor,
                 )
             } else {
                 listOf(primaryColor, surfaceColor)
             }
+        } else {
+            listOf(primaryColor, surfaceColor)
+        }
 
         Brush.verticalGradient(colors)
     }
