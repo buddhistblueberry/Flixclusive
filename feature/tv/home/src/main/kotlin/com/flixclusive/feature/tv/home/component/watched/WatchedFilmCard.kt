@@ -87,14 +87,16 @@ internal fun WatchedFilmCard(
     var drawable: Drawable? by remember { mutableStateOf(null) }
 
     LaunchedEffect(isFocused, drawable) {
-        if (isFocused && drawable != null) {
-            Palette
-                .from(drawable!!.toBitmap())
-                .generate()
-                .vibrantSwatch
-                ?.rgb?.let {
-                    immersiveBackgroundColor.value = Color(it)
-                }
+        if (isFocused) {
+            drawable?.toBitmap()?.let { bitmap ->
+                Palette
+                    .from(bitmap)
+                    .generate()
+                    .vibrantSwatch
+                    ?.rgb?.let {
+                        immersiveBackgroundColor.value = Color(it)
+                    }
+            }
         }
     }
 

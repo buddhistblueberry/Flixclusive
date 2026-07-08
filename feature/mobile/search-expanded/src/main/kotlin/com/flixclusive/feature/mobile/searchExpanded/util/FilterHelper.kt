@@ -85,8 +85,8 @@ internal object FilterHelper {
     @Stable
     private fun Filter<*>.getFilterDisplayValue(context: Context): String {
         val selectedFilter = when (this) {
-            is Filter.Select<*> -> options.getOrNull(state!!)
-            is Filter.Sort<*> -> options.getOrNull(state!!.index)
+            is Filter.Select<*> -> state?.let { options.getOrNull(it) }
+            is Filter.Sort<*> -> state?.let { options.getOrNull(it.index) }
             else -> null
         }
 

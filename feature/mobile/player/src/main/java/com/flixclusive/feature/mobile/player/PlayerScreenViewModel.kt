@@ -471,8 +471,8 @@ internal class PlayerScreenViewModel @Inject constructor(
                 ownerId = userId,
                 progress = 0L,
                 status = WatchStatus.WATCHING,
-                seasonNumber = selectedEpisode.value!!.number,
-                episodeNumber = selectedEpisode.value!!.number,
+                seasonNumber = selectedEpisode.value?.number ?: 1,
+                episodeNumber = selectedEpisode.value?.number ?: 1,
             )
 
             else -> throw IllegalStateException("Unsupported film type: $filmMetadata")

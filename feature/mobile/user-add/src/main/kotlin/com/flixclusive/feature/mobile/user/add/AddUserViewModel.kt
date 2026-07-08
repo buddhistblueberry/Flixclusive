@@ -111,9 +111,10 @@ internal class AddUserViewModel
                 return backdropImage
             }
 
+            val id = tmdbId ?: return backdropImage
             return tmdbAssetsRepository
                 .getPosterWithoutLogo(
-                    id = tmdbId!!,
+                    id = id,
                     mediaType = filmType.type,
                 ).data ?: backdropImage
         }

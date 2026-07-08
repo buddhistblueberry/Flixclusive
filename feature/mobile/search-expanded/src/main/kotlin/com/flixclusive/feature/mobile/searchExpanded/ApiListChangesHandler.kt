@@ -43,6 +43,6 @@ internal class ApiListChangesHandler(
             name = api::class.java.simpleName
         }
 
-        return name!!
+        return name ?: api::class.java.simpleName
     }
 }

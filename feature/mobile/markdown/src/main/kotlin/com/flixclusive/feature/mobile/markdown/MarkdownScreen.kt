@@ -101,12 +101,12 @@ fun MarkdownScreen(
         }
     }
 
-    if (linkToOpen != null) {
+    linkToOpen?.let { url ->
         TextAlertDialog(
             title = stringResource(id = LocaleR.string.heads_up),
             message = stringResource(id = LocaleR.string.not_trusted_url),
             confirmButtonLabel = stringResource(id = LocaleR.string.proceed),
-            onConfirm = { uriHandler.openUri(linkToOpen!!) },
+            onConfirm = { uriHandler.openUri(url) },
             onDismiss = { linkToOpen = null },
         )
     }

@@ -67,11 +67,8 @@ internal fun LazyGridScope.seriesContent(
 
         seasonToDisplay is Resource.Failure || seasonToDisplay.data == null -> {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                val error = if (seasonToDisplay.error != null) {
-                    seasonToDisplay.error!!.asString()
-                } else {
-                    stringResource(LocaleR.string.season_fetch_error, selectedSeason)
-                }
+                val error = seasonToDisplay.error?.asString()
+                    ?: stringResource(LocaleR.string.season_fetch_error, selectedSeason)
 
                 RetryButton(
                     error = error,
@@ -84,7 +81,7 @@ internal fun LazyGridScope.seriesContent(
         }
 
         seasonToDisplay is Resource.Success -> {
-            val season = seasonToDisplay.data!!
+            val season = seasonToDisplay.data ?: return@LazyVerticalGrid
             season.overview?.let {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(

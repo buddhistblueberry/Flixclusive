@@ -134,7 +134,7 @@ class DownloadService : Service() {
      * **This ensures that downloads continue even if the device goes to sleep.**
      * */
     private fun setupWakeLock() {
-        val powerManager: PowerManager = getSystemService()!!
+        val powerManager: PowerManager = getSystemService() ?: return
         val wakeLock = powerManager.newWakeLock(
             PowerManager.PARTIAL_WAKE_LOCK,
             "${javaClass.name}:DownloadWakeLock",

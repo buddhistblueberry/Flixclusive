@@ -263,7 +263,8 @@ internal class SearchExpandedScreenViewModel
                 )
             } else {
                 try {
-                    val api = providerApiRepository.getApi(selectedProviderId)!!
+                    val api = providerApiRepository.getApi(selectedProviderId)
+                        ?: return@launch Resource.Failure(Exception("API not found"))
                     val result = withContext(appDispatchers.io) {
                         api.search(page = page, title = query)
                     }

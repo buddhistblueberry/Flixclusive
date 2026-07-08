@@ -77,7 +77,7 @@ internal class TMDBMetadataRepositoryImpl @Inject constructor(
                     return@withContext Resource.Failure(season.error)
                 }
 
-                val episodeId = season.data!!.episodes.find {
+                val episodeId = season.data?.episodes?.find {
                     it.season == seasonNumber &&
                         it.number == episodeNumber
                 }
