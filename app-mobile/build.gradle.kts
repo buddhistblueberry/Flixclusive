@@ -31,6 +31,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        // Optimize for English only and arm64
+        resConfigs("en")
+        ndk {
+            abiFilters.add("arm64-v8a")
+        }
     }
 
     buildTypes {
