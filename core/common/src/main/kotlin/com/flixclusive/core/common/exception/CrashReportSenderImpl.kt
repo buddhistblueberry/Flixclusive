@@ -29,11 +29,11 @@ internal class CrashReportSenderImpl
             withContext(dispatchers.io) {
                 val token = BuildConfig.GITHUB_TOKEN
                 if (token.isBlank()) {
-                    withContext(dispatchers.main) {
-                        context.showToast("No GITHUB_TOKEN configured — crash not reported")
-                    }
+                    // No token in CI builds — silently skip to avoid toast spam
                     return@withContext
                 }
+
+                // ... rest of the function remains
 
                 val title = "Crash Report: ${errorLog.lines().firstOrNull()?.take(80) ?: "Unknown"}"
                 val body = """
