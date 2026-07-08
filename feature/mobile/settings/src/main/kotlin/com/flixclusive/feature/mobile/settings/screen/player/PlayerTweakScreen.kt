@@ -90,7 +90,7 @@ internal class PlayerTweakScreen(
                     TweakUI.ListTweak(
                         title = stringResource(LocaleR.string.resize_mode),
                         descriptionProvider = {
-                            selectedResizeMode.uiText.asString(context)
+                            selectedResizeMode.value.uiText.asString(context)
                         },
                         value = selectedResizeMode,
                         onTweaked = {
