@@ -36,8 +36,8 @@ internal class UserSessionManagerImpl
 
         override suspend fun restoreSession() {
             withContext(appDispatchers.io) {
-                val savedUserId = userSessionDataStore.currentUserId.first()!!
-                val user = userRepository.getUser(id = savedUserId)!!
+                val savedUserId = userSessionDataStore.currentUserId.first() ?: return@withContext
+                val user = userRepository.getUser(id = savedUserId) ?: return@withContext
                 signIn(user)
             }
         }

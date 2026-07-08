@@ -93,9 +93,9 @@ internal fun LibraryCard(
                     maxLines = 3,
                 )
 
-                if (libraryListWithPreview.description != null) {
+                libraryListWithPreview.description?.let { description ->
                     Text(
-                        text = libraryListWithPreview.description!!,
+                        text = description,
                         style = MaterialTheme.typography.bodySmall.asAdaptiveTextStyle(),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 2,

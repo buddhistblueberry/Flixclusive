@@ -29,7 +29,7 @@ internal class ProvidersOperationsHandler(
     }
 
     private fun handleAdd(id: String) {
-        val provider = repository.getProviderMetadata(id)!!
+        val provider = repository.getProviderMetadata(id) ?: return
         if (!providers.contains(provider)) {
             providers.add(provider)
         }

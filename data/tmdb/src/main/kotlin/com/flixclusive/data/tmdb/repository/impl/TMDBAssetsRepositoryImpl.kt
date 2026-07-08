@@ -24,10 +24,8 @@ internal class TMDBAssetsRepositoryImpl @Inject constructor(
                     id = id,
                 )
 
-                val logo = response.logos!!
-                    .first()
-                    .filePath
-                    .replace("svg", "png")
+                val logo = response.logos?.firstOrNull()?.filePath?.replace("svg", "png")
+                    ?: return@withContext Resource.Failure(Exception("No logo found"))
 
                 Resource.Success(logo)
             } catch (e: Exception) {
@@ -48,7 +46,9 @@ internal class TMDBAssetsRepositoryImpl @Inject constructor(
                     includeImageLanguage = null,
                 )
 
-                Resource.Success(response.posters!!.first().filePath)
+                val poster = response.posters?.firstOrNull()?.filePath
+                    ?: return@withContext Resource.Failure(Exception("No poster found"))
+                Resource.Success(poster)
             } catch (e: Exception) {
                 e.toNetworkException()
             }

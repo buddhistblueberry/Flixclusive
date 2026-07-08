@@ -68,7 +68,7 @@ internal fun <T> SelectDropdownMenu(
             return@remember ""
         }
 
-        val option = options[selected]!!
+        val option = options.getOrNull(selected) ?: return@remember ""
 
         option.toOptionString(context = context)
     }

@@ -119,9 +119,11 @@ internal class ProviderManagerViewModel @Inject constructor(
                         providerApiRepository.addApiFromId(id = id)
                     } catch (e: Throwable) {
                         providerRepository.toggleProvider(id = id)
-                        val metadata = providerRepository.getProviderMetadata(id)!!
-                        val error = ProviderWithThrowable(provider = metadata, throwable = e)
-                        _uiState.update { it.copy(error = error) }
+                        val metadata = providerRepository.getProviderMetadata(id)
+                        if (metadata != null) {
+                            val error = ProviderWithThrowable(provider = metadata, throwable = e)
+                            _uiState.update { it.copy(error = error) }
+                        }
                     }
                 }
             }

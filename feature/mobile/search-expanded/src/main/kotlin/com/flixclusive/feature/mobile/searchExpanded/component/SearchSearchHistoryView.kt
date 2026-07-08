@@ -60,11 +60,11 @@ internal fun SearchSearchHistoryView(
         }
     }
 
-    if (searchHistoryToDelete != null) {
+    searchHistoryToDelete?.let { item ->
         TextAlertDialog(
             title = stringResource(id = LocaleR.string.delete_search_history_item),
             message = stringResource(id = LocaleR.string.delete_search_history_item_message),
-            onConfirm = { deleteSearchHistoryItem(searchHistoryToDelete!!) },
+            onConfirm = { deleteSearchHistoryItem(item) },
             onDismiss = { searchHistoryToDelete = null },
         )
     }

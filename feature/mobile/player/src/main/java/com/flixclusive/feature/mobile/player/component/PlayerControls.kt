@@ -486,9 +486,9 @@ internal fun PlayerControls(
                         EpisodesScreen(
                             currentSeason = currentSeason,
                             seasons = (film as TvShow).seasons,
-                            currentEpisode = currentEpisode!!,
-                            onSeasonChange = onSeasonChange!!::invoke,
-                            onEpisodeClick = onEpisodeChange!!::invoke,
+                            currentEpisode = currentEpisode ?: return,
+                            onSeasonChange = onSeasonChange?.invoke ?: {},
+                            onEpisodeClick = onEpisodeChange?.invoke ?: {},
                             onDismiss = { uiMode = UiMode.NONE },
                             modifier = Modifier
                                 .fillMaxSize(),

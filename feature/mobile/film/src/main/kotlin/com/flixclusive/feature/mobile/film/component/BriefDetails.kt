@@ -183,7 +183,7 @@ private fun ProviderUsed(
     val providerName = if (provider?.id == DEFAULT_FILM_SOURCE_NAME) {
         stringResource(LocaleR.string.app_name)
     } else {
-        provider!!.name
+        provider?.name ?: ""
     }
 
     Row(

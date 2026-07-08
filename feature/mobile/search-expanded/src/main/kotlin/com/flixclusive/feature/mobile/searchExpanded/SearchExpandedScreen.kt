@@ -217,9 +217,9 @@ private fun SearchExpandedScreenContent(
         }
     }
 
-    if (filterGroupIndexToShow != null) {
+    filterGroupIndexToShow?.let { index ->
         FilterBottomSheet(
-            filters = sortedFilters[filterGroupIndexToShow!!],
+            filters = sortedFilters[index],
             onUpdateFilters = { onUpdateFilters(sortedFilters) },
             onDismissRequest = { filterGroupIndexToShow = null },
         )
