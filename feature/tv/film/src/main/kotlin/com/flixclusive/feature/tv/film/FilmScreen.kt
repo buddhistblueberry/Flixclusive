@@ -287,7 +287,7 @@ internal fun FilmScreen(
                                     .onFocusChanged { buttonsHasFocus = it.hasFocus }
                             ) {
                                 AnimatedContent(
-                                    targetState = film!!,
+                                    targetState = film,
                                     transitionSpec = {
                                         ContentTransform(
                                             targetContentEnter = fadeIn(),
@@ -363,11 +363,11 @@ internal fun FilmScreen(
                                     )
                             ) {
                                 FilmsRow(
-                                    films = film!!.recommendations,
+                                    films = film?.recommendations ?: emptyList(),
                                     hasFocus = otherFilmsHasFocus,
                                     label = UiText.StringResource(LocaleR.string.other_films_message),
                                     iconId = R.drawable.round_dashboard_24,
-                                    currentFilm = film!!,
+                                    currentFilm = film,
                                     goBack = navigator::goBack,
                                     onFocusChange = {
                                         otherFilmsHasFocus = it

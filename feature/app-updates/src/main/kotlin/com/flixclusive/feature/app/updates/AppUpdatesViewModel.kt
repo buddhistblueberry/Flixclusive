@@ -127,11 +127,12 @@ class AppUpdatesViewModel
 
                 val file = File(destinationPath, "$version.apk")
 
+                val parentDir = file.parent ?: destinationPath
                 downloadFile(
                     request = DownloadRequest.from(
                         url = url,
                         fileName = file.name,
-                        destinationPath = file.parent!!,
+                        destinationPath = parentDir,
                     ),
                 ).collectLatest {
                     _downloadState.value = it

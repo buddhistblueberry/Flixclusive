@@ -197,7 +197,7 @@ internal class ProviderDetailsViewModel
                 return false
             }
 
-            val new = resource.data!!
+            val new = resource.data ?: return false
 
             return old.versionCode < new.versionCode
         }

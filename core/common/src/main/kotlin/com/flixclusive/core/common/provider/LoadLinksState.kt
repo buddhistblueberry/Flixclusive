@@ -122,7 +122,7 @@ sealed class LoadLinksState(
             } else if (error?.localizedMessage == null) {
                 UiText.from(defaultErrorMessageId)
             } else {
-                UiText.from(error.localizedMessage!!)
+                UiText.from(error?.localizedMessage ?: defaultErrorMessageId)
             },
         )
     }

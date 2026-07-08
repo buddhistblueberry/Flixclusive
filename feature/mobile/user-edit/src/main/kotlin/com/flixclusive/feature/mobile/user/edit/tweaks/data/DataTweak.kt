@@ -191,7 +191,7 @@ internal class DataTweak(
                             modifier = Modifier
                                 .clickable {
                                     onCheckedChange(
-                                        !selectedLibraries[library]!!,
+                                        !(selectedLibraries[library] ?: false),
                                     )
                                 },
                         ) {
@@ -202,7 +202,7 @@ internal class DataTweak(
                                     .padding(3.dp),
                             ) {
                                 CommonCheckbox(
-                                    checked = selectedLibraries[library]!!,
+                                    checked = selectedLibraries[library] ?: false,
                                     onCheckedChange = onCheckedChange,
                                 )
 

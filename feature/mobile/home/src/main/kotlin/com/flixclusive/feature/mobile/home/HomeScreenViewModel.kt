@@ -252,7 +252,7 @@ internal class HomeScreenViewModel
                     )
                 }
 
-                val page = _uiState.value.pagingStates[catalog.url]!!.page
+                val page = _uiState.value.pagingStates[catalog.url]?.page ?: 1
                 val response = paginateItems(catalog = catalog, page = page)
                 val data = response.data
 
@@ -261,7 +261,7 @@ internal class HomeScreenViewModel
                         val oldPagingState = it.pagingStates[catalog.url] ?: return@launch
 
                         val errorState = when (response) {
-                            is Resource.Failure -> PagingDataState.Error(response.error!!)
+                            is Resource.Failure -> PagingDataState.Error(response.error)
                             else -> PagingDataState.Error()
                         }
 

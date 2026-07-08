@@ -200,7 +200,7 @@ internal class AddProviderViewModel @Inject constructor(
             _uiState.update { it.copy(isInstallingProviders = _selected.value.isNotEmpty()) }
             _selected.value.forEach { provider ->
                 val job = providerJobs[provider.id]
-                val installationStatus = providerInstallationStatusMap[provider.id]!!
+                val installationStatus = providerInstallationStatusMap[provider.id] ?: return@forEach
 
                 if (job?.isActive == true ||
                     installationStatus.isInstalled ||

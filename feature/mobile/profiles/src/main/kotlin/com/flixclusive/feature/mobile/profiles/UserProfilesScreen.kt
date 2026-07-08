@@ -121,8 +121,8 @@ internal fun UserProfilesScreen(
     }
 
     pinVerifyResultRecipient.onNavResult { result ->
-        if (result is NavResult.Value && result.value.isVerified && uiState.focusedProfile != null) {
-            viewModel.onUseProfile(uiState.focusedProfile!!)
+        if (result is NavResult.Value && result.value.isVerified) {
+            uiState.focusedProfile?.let { viewModel.onUseProfile(it) }
         }
     }
 

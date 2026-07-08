@@ -151,7 +151,7 @@ internal fun SettingsScreen(
                         ListContent(
                             buildConfig = viewModel.buildConfig,
                             items = items,
-                            currentUser = { currentUser!! },
+                            currentUser = { currentUser },
                             navigator = navigator,
                             onScroll = { backgroundAlpha.floatValue = it },
                             onItemClick = { item ->
@@ -235,18 +235,19 @@ private fun getAdaptiveBackground(currentUser: User?): Brush {
         val colors =
             if (currentUser != null) {
                 val avatarId = context.getAvatarResource(currentUser.image)
-                val drawable = ContextCompat.getDrawable(context, avatarId)!!
+                val drawable = ContextCompat.getDrawable(context, avatarId)
 
-                val palette =
-                    Palette
-                        .from(drawable.toBitmap())
-                        .generate()
+                if (drawable != null) {
+                    val palette =
+                        Palette
+                            .from(drawable.toBitmap())
+                            .generate()
 
-                val backgroundColor = Color(palette.dominantSwatch?.rgb ?: surfaceColor.toArgb())
-                val tubeLightColor = Color(palette.lightVibrantSwatch?.rgb ?: surfaceColor.toArgb())
+                    val backgroundColor = Color(palette.dominantSwatch?.rgb ?: surfaceColor.toArgb())
+                    val tubeLightColor = Color(palette.lightVibrantSwatch?.rgb ?: surfaceColor.toArgb())
 
-                listOf(
-                    tubeLightColor.copy(0.5F),
+                    listOf(
+                        tubeLightColor.copy(0.5F),
                     backgroundColor.copy(0.2F),
                     surfaceColor,
                 )

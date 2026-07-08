@@ -113,8 +113,10 @@ internal class RepositoryManagerViewModel
                     }
 
                     is Resource.Success -> {
-                        updateProviderPrefs {
-                            it.copy(repositories = it.repositories + repository.data!!)
+                        repository.data?.let { repo ->
+                            updateProviderPrefs {
+                                it.copy(repositories = it.repositories + repo)
+                            }
                         }
                     }
                 }

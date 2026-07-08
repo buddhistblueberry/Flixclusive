@@ -293,10 +293,10 @@ private fun RenderTweakUi(
                 options = tweak.options,
                 selectedValueProvider = { tweak.value.value },
                 enabledProvider = tweak.enabledProvider,
-                onValueChange = {
+                onValueChange = { value ->
                     scope.launch {
-                        if (tweak.internalOnValueChanged(it!!)) {
-                            tweak.internalSet(it)
+                        if (value != null && tweak.internalOnValueChanged(value)) {
+                            tweak.internalSet(value)
                         }
                     }
                 },

@@ -173,10 +173,11 @@ internal class SearchScreenViewModel @Inject constructor(
 
     private fun getCatalogItems() {
         viewModelScope.launch {
-            val filmTypeCouldBeBoth = selectedCatalog!!.mediaType == "all"
+            val catalog = selectedCatalog ?: return@launch
+            val filmTypeCouldBeBoth = catalog.mediaType == "all"
             val urlQuery = if(filmTypeCouldBeBoth && currentFilterSelected != SearchFilter.ALL) {
-                selectedCatalog!!.url.replaceTypeInUrl(currentFilterSelected.type)
-            } else selectedCatalog!!.url
+                catalog.url.replaceTypeInUrl(currentFilterSelected.type)
+            } else catalog.url
 
 
             loadItems(
