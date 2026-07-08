@@ -263,10 +263,15 @@ internal class GetMediaLinksUseCaseImpl
             film: FilmMetadata,
             episode: Episode? = null,
         ) {
+            val tmdbId = film.tmdbId
+            if (tmdbId == null) {
+                throw ExceptionWithUiText(UiText.from(LocaleR.string.no_available_providers))
+            }
+            
             when (
                 val response = tmdbWatchProvidersRepository.getWatchProviders(
                     mediaType = film.filmType.type,
-                    id = film.tmdbId!!,
+                    id = tmdbId,
                 )
             ) {
                 is Resource.Success<*> -> {
@@ -342,13 +347,18 @@ internal class GetMediaLinksUseCaseImpl
                         withContext(appDispatchers.main) {
                             webView = api.getWebView()
                         }
-
-                        webView!!.getLinks(
-                            watchId = watchId,
-                            film = film,
-                            episode = episode,
-                            onLinkFound = onLinkFound,
-                        )
+                        
+                        val wv = webView
+                        if (wv != null) {
+                            wv.getLinks(
+                                watchId = watchId,
+                                film = film,
+                                episode = episode,
+                                onLinkFound = onLinkFound,
+                            )
+                        } else {
+                            throw IllegalStateException("WebView is null for ProviderWebViewApi")
+                        }
                     } else {
                         api.getLinks(
                             watchId = watchId,
