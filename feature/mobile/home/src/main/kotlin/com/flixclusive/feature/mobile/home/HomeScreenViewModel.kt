@@ -261,7 +261,7 @@ internal class HomeScreenViewModel
                         val oldPagingState = it.pagingStates[catalog.url] ?: return@launch
 
                         val errorState = when (response) {
-                            is Resource.Failure -> PagingDataState.Error(response.error ?: UiText.from(R.string.unknown_error))
+                            is Resource.Failure -> PagingDataState.Error(response.error ?: UiText.from(R.string.failed_to_get_header_item))
                             else -> PagingDataState.Error()
                         }
 

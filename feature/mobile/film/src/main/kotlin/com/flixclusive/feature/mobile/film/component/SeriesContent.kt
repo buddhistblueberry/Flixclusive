@@ -82,6 +82,7 @@ internal fun LazyGridScope.seriesContent(
 
         seasonToDisplay is Resource.Success -> {
             val season = seasonToDisplay.data
+            if (season == null) return@when
             season.overview?.let {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(

@@ -354,7 +354,7 @@ internal class AddProviderViewModel @Inject constructor(
             when (val result = getProviderFromRemote(repository)) {
                 Resource.Loading -> Unit
                 is Resource.Failure -> {
-                    val pair = repository to (result.error ?: UiText.from(R.string.unknown_error))
+                    val pair = repository to (result.error ?: UiText.from(R.string.repository_failure))
                     _uiState.update {
                         it.copy(repositoryExceptions = it.repositoryExceptions + pair)
                     }
