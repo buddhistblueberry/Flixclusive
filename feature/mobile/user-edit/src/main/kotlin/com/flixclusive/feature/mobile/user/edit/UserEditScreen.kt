@@ -116,8 +116,9 @@ private fun UserEditScreenContent(
                     initialName = user.name,
                     userHasPin = user.pin != null,
                     onOpenPinScreen = { isRemovingPin ->
-                        val action = if (isRemovingPin && user.pin != null) {
-                            PinAction.Verify(user.pin)
+                        val currentPin = user.pin
+                        val action = if (isRemovingPin && currentPin != null) {
+                            PinAction.Verify(currentPin)
                         } else {
                             PinAction.Setup
                         }

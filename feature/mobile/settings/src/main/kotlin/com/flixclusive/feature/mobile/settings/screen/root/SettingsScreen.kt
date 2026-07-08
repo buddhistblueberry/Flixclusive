@@ -131,7 +131,8 @@ internal fun SettingsScreen(
         }
     }
 
-    if (currentUser != null) {
+    val user = currentUser
+    if (user != null) {
         CompositionLocalProvider(
             LocalScaffoldNavigator provides scaffoldNavigator,
             LocalSettingsNavigator provides navigator,
@@ -151,7 +152,7 @@ internal fun SettingsScreen(
                         ListContent(
                             buildConfig = viewModel.buildConfig,
                             items = items,
-                            currentUser = { currentUser },
+                            currentUser = { user },
                             navigator = navigator,
                             onScroll = { backgroundAlpha.floatValue = it },
                             onItemClick = { item ->
