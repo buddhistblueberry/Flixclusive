@@ -24,6 +24,9 @@
 # Local configuration file (sdk path, etc)
 /local.properties
 
+# Per-session pi agent notes
+/.pi
+
 # I don't know what these are
 .DS_Store
 /captures
