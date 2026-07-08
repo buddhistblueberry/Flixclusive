@@ -44,7 +44,7 @@ internal fun Context.createUserPreferences(
                 }
         }
 
-        USER_PREFS_INSTANCE!!
+        USER_PREFS_INSTANCE ?: throw IllegalStateException("DataStore not initialized")
     }
 }
 

@@ -20,11 +20,9 @@ internal class ProgressResponseBody(
     override fun contentLength(): Long = responseBody.contentLength()
 
     override fun source(): BufferedSource {
-        if (bufferedSource == null) {
-            bufferedSource = source(responseBody.source()).buffer()
+        return bufferedSource ?: source(responseBody.source()).buffer().also {
+            bufferedSource = it
         }
-
-        return bufferedSource!!
     }
 
     private fun source(source: Source): Source {

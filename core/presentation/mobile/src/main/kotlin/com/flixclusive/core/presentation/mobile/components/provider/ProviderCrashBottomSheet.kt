@@ -82,8 +82,8 @@ fun ProviderCrashBottomSheet(
     val onDismiss by rememberUpdatedState(onDismissRequest)
     var detailedCrashLog by remember { mutableStateOf<ProviderWithThrowable?>(null) }
 
-    if (detailedCrashLog != null) {
-        val (provider, error) = detailedCrashLog!!
+    detailedCrashLog?.let { crashLog ->
+        val (provider, error) = crashLog
 
         ProviderCrashDialog(
             provider = provider,

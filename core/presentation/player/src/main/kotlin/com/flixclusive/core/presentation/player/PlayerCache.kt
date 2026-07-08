@@ -38,9 +38,7 @@ class PlayerCache @Inject constructor(
      * @return An instance of [SimpleCache].
      * */
     fun get(size: Long): SimpleCache {
-        if (this.cache != null) {
-            return this.cache!!
-        }
+        this.cache?.let { return it }
 
         return SimpleCache(
             File(context.filesDir, CACHE_DIR_KEY).also { it.deleteOnExit() },

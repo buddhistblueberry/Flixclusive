@@ -70,11 +70,13 @@ internal fun TMDBTvShow.toTvShowDetails(): TvShow {
         networks = networks,
         seasons = seasons,
         parsedReleaseDate = safeCall {
-            formatAirDates(
-                firstAirDate = releaseDate!!,
-                lastAirDate = lastAirDate!!,
-                inProduction = inProduction
-            )
+            if (releaseDate != null && lastAirDate != null) {
+                formatAirDates(
+                    firstAirDate = releaseDate,
+                    lastAirDate = lastAirDate,
+                    inProduction = inProduction
+                )
+            } else releaseDate
         } ?: releaseDate,
         totalEpisodes = totalEpisodes,
         totalSeasons = totalSeasons,

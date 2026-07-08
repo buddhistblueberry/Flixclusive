@@ -12,9 +12,7 @@ import androidx.compose.material3.SnackbarHostState
  * @param message The message to be displayed in the snackbar.
  * */
 suspend fun SnackbarHostState.showMessage(message: String) {
-    if (currentSnackbarData != null) {
-        currentSnackbarData!!.dismiss()
-    }
+    currentSnackbarData?.dismiss()
 
     showSnackbar(
         message = message,

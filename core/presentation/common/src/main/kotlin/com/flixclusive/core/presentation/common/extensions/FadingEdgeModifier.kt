@@ -220,22 +220,22 @@ private class FadingEdgeNode(
         topEdgeShader = RuntimeShader(topFadingEdgeShader).also {
             it.setFloatUniform("resolution", size.width, size.height)
         }
-        topEdgeBrush = ShaderBrush(topEdgeShader!!)
+        topEdgeBrush = ShaderBrush(topEdgeShader ?: return)
 
         bottomEdgeShader = RuntimeShader(bottomFadingEdgeShader).also {
             it.setFloatUniform("resolution", size.width, size.height)
         }
-        bottomEdgeBrush = ShaderBrush(bottomEdgeShader!!)
+        bottomEdgeBrush = ShaderBrush(bottomEdgeShader ?: return)
 
         startEdgeShader = RuntimeShader(startFadingEdgeShader).also {
             it.setFloatUniform("resolution", size.width, size.height)
         }
-        startEdgeBrush = ShaderBrush(startEdgeShader!!)
+        startEdgeBrush = ShaderBrush(startEdgeShader ?: return)
 
         endEdgeShader = RuntimeShader(endFadingEdgeShader).also {
             it.setFloatUniform("resolution", size.width, size.height)
         }
-        endEdgeBrush = ShaderBrush(endEdgeShader!!)
+        endEdgeBrush = ShaderBrush(endEdgeShader ?: return)
     }
 
     /**

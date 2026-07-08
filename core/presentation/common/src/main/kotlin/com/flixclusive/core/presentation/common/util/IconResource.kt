@@ -26,7 +26,7 @@ class IconResource private constructor(
             return painterResource(id = it)
         }
 
-        return rememberVectorPainter(image = imageVector!!)
+        return rememberVectorPainter(image = imageVector ?: throw IllegalStateException("IconResource has no drawable or image vector"))
     }
 
     /**
